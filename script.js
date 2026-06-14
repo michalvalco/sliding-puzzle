@@ -2,7 +2,7 @@
    Sliding Puzzle — landing page interactions
    - A real, playable 3x3 sliding puzzle (move-based shuffle,
      so it is always solvable — just like the game).
-   - Sticky-nav shadow, mobile menu, scroll reveal, copy button.
+   - Sticky-nav shadow, mobile menu, scroll reveal, lightbox, keyboard play.
    ============================================================ */
 
 (function () {
@@ -37,17 +37,19 @@
   }
 
   function render() {
+    // Keep keyboard focus on the board across the rebuild (arrow-key play).
+    var hadFocus = puzzleEl.contains(document.activeElement) || document.activeElement === puzzleEl;
     puzzleEl.innerHTML = "";
     for (var pos = 0; pos < board.length; pos++) {
       var value = board[pos];
       var tile = document.createElement("button");
       tile.type = "button";
       tile.className = "tile";
+      tile.tabIndex = -1;  // the container is the single keyboard stop
       tile.style.setProperty("--img", "url(" + HERO_IMG + ")");
       if (value === BLANK) {
         tile.classList.add("blank");
         tile.setAttribute("aria-hidden", "true");
-        tile.tabIndex = -1;
       } else {
         tile.style.backgroundPosition = bgPosition(value);
         tile.setAttribute("aria-label", "Tile " + (value + 1));
@@ -59,6 +61,7 @@
       puzzleEl.appendChild(tile);
     }
     moveCountEl.textContent = moves;
+    if (hadFocus) puzzleEl.focus();
   }
 
   function blankPos() { return board.indexOf(BLANK); }
@@ -121,7 +124,20 @@
     render();
   }
 
+  function moveByKey(key) {
+    // Arrow = the direction a tile slides into the blank (mirrors the game).
+    var blank = blankPos();
+    var r = Math.floor(blank / SIZE), c = blank % SIZE, target = -1;
+    if (key === "ArrowUp" && r < SIZE - 1) target = blank + SIZE;        // tile below slides up
+    else if (key === "ArrowDown" && r > 0) target = blank - SIZE;        // tile above slides down
+    else if (key === "ArrowLeft" && c < SIZE - 1) target = blank + 1;    // tile right slides left
+    else if (key === "ArrowRight" && c > 0) target = blank - 1;          // tile left slides right
+    if (target >= 0) { tryMove(target); return true; }
+    return false;
+  }
+
   if (puzzleEl) {
+    puzzleEl.tabIndex = 0;  // single keyboard stop; arrow keys play (moveByKey)
     var img = new Image();
     img.onload = shuffle;
     img.onerror = shuffle;   // still playable if the image is missing
@@ -130,6 +146,9 @@
     var rBtn = document.getElementById("reset-btn");
     if (sBtn) sBtn.addEventListener("click", shuffle);
     if (rBtn) rBtn.addEventListener("click", reset);
+    puzzleEl.addEventListener("keydown", function (e) {
+      if (e.key.indexOf("Arrow") === 0 && moveByKey(e.key)) e.preventDefault();
+    });
   }
 
   /* ---------- Sticky nav shadow ---------- */
@@ -153,58 +172,6 @@
       if (e.target.tagName === "A") {
         menu.classList.remove("open");
         toggle.setAttribute("aria-expanded", "false");
-      }
-    });
-  }
-
-  /* ---------- Copy install commands ---------- */
-  var copyBtn = document.getElementById("copy-btn");
-  if (copyBtn) {
-    copyBtn.addEventListener("click", function () {
-      var code = document.getElementById("install-code");
-      var text = code ? code.textContent : "";
-      var ok = function () {
-        copyBtn.textContent = "Copied";
-        copyBtn.classList.add("copied");
-        setTimeout(function () {
-          copyBtn.textContent = "Copy";
-          copyBtn.classList.remove("copied");
-        }, 1800);
-      };
-      var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || "");
-      var fail = function () {
-        try {
-          var range = document.createRange();
-          range.selectNodeContents(code);
-          var sel = window.getSelection();
-          sel.removeAllRanges();
-          sel.addRange(range);
-        } catch (e) {}
-        copyBtn.textContent = isMac ? "Press Cmd+C" : "Press Ctrl+C";
-        setTimeout(function () { copyBtn.textContent = "Copy"; }, 2600);
-      };
-      var legacyCopy = function () {
-        try {
-          var ta = document.createElement("textarea");
-          ta.value = text;
-          ta.setAttribute("readonly", "");
-          ta.style.position = "absolute";
-          ta.style.left = "-9999px";
-          document.body.appendChild(ta);
-          ta.select();
-          var copied = document.execCommand("copy");
-          document.body.removeChild(ta);
-          return copied;
-        } catch (e) { return false; }
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(ok, function () {
-          if (legacyCopy()) { ok(); } else { fail(); }
-        });
-      } else if (legacyCopy()) {
-        ok();
-      } else {
-        fail();
       }
     });
   }
@@ -247,14 +214,24 @@
     lightbox.addEventListener("click", function (e) {
       if (e.target === lightbox || e.target === lightboxImg) closeLightbox();
     });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closeLightbox();
+    // Trap Tab inside the dialog (only the close button is focusable).
+    lightbox.addEventListener("keydown", function (e) {
+      if (e.key === "Tab") { e.preventDefault(); lightboxClose.focus(); }
     });
   }
+  // Escape closes the lightbox first, otherwise the open mobile menu.
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (lightbox && !lightbox.hidden) { closeLightbox(); return; }
+    if (menu && menu.classList.contains("open")) {
+      menu.classList.remove("open");
+      if (toggle) { toggle.setAttribute("aria-expanded", "false"); toggle.focus(); }
+    }
+  });
 
   /* ---------- Scroll reveal ---------- */
   var revealTargets = document.querySelectorAll(
-    ".feature-card, .shot, .stat, .step, .timeline li, .band-lead, .daily-copy, .story-copy, .daily-shot"
+    ".feature-card, .shot, .stat, .how-steps li, .dl-steps li, .timeline li, .band-lead, .daily-copy, .story-copy, .daily-shot"
   );
   if (!reduceMotion && "IntersectionObserver" in window) {
     revealTargets.forEach(function (el) { el.classList.add("reveal"); });
