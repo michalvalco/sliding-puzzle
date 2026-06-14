@@ -380,18 +380,22 @@
 
   /* ---------- Copy-to-clipboard (SHA-256 checksum) ---------- */
   function fallbackCopy(text, done) {
+    var ta = document.createElement("textarea");
+    var ok = false;
     try {
-      var ta = document.createElement("textarea");
       ta.value = text;
       ta.setAttribute("readonly", "");
       ta.style.position = "absolute";
       ta.style.left = "-9999px";
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      if (done) done();
-    } catch (e) {}
+      ok = document.execCommand("copy");
+    } catch (e) {
+      ok = false;
+    } finally {
+      if (ta.parentNode) ta.parentNode.removeChild(ta);  // always clean up
+    }
+    if (done) done(ok);
   }
   [].slice.call(document.querySelectorAll(".copy-btn")).forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -399,16 +403,22 @@
       var text = el ? el.textContent.trim() : "";
       if (!text) return;
       var label = btn.querySelector(".copy-label");
-      function done() {
-        btn.classList.add("copied");
-        if (label) label.textContent = "Copied";
+      var status = btn.parentNode ? btn.parentNode.querySelector(".copy-status") : null;
+      // Only show success when the copy actually succeeded; announce to screen readers.
+      function done(ok) {
+        btn.classList.toggle("copied", !!ok);
+        if (label) label.textContent = ok ? "Copied" : "Copy";
+        if (status) status.textContent = ok
+          ? "Checksum copied to clipboard"
+          : "Couldn’t copy — select the text and copy it manually";
         setTimeout(function () {
           btn.classList.remove("copied");
           if (label) label.textContent = "Copy";
+          if (status) status.textContent = "";
         }, 1800);
       }
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { fallbackCopy(text, done); });
       } else {
         fallbackCopy(text, done);
       }
@@ -434,12 +444,13 @@
   if (analyticsOn) {
     var gc = document.createElement("script");
     gc.async = true;
-    gc.src = "//gc.zgo.at/count.js";
+    gc.src = "https://gc.zgo.at/count.js";
     gc.setAttribute("data-goatcounter", GC_ENDPOINT);
     document.head.appendChild(gc);
 
     // Aggregate, no-PII events: download conversions + demo engagement.
-    [].slice.call(document.querySelectorAll('a[href*="SlidingPuzzle-Windows.zip"]'))
+    // href$= so the checksum link (.zip.sha256) is not counted as a download.
+    [].slice.call(document.querySelectorAll('a[href$="SlidingPuzzle-Windows.zip"]'))
       .forEach(function (a) {
         a.addEventListener("click", function () { countEvent("download-windows-zip", "Download click"); });
       });

@@ -100,6 +100,12 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .skip-link:focus { left: 0; color: #fff; }
 
+/* Visually hidden but available to screen readers (e.g. copy-success status). */
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
 /* ---------- Buttons ---------- */
 .btn {
     display: inline-flex; align-items: center; justify-content: center;
@@ -852,6 +858,7 @@ body { transition: background-color .3s ease, color .3s ease; }
                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke-linecap="round"/></svg>
                                 <span class="copy-label">Copy</span>
                             </button>
+                            <span class="sr-only copy-status" role="status" aria-live="polite"></span>
                         </div>
                         <p class="dl-checksum-note">Optional: confirm the build is genuine. In PowerShell, run <code>Get-FileHash SlidingPuzzle-Windows.zip</code> and check the hash matches the one above. You can also download the <a href="SlidingPuzzle-Windows.zip.sha256"><code>.sha256</code> file</a>.</p>
                     </div>
@@ -1416,18 +1423,22 @@ body { transition: background-color .3s ease, color .3s ease; }
 
   /* ---------- Copy-to-clipboard (SHA-256 checksum) ---------- */
   function fallbackCopy(text, done) {
+    var ta = document.createElement("textarea");
+    var ok = false;
     try {
-      var ta = document.createElement("textarea");
       ta.value = text;
       ta.setAttribute("readonly", "");
       ta.style.position = "absolute";
       ta.style.left = "-9999px";
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      if (done) done();
-    } catch (e) {}
+      ok = document.execCommand("copy");
+    } catch (e) {
+      ok = false;
+    } finally {
+      if (ta.parentNode) ta.parentNode.removeChild(ta);  // always clean up
+    }
+    if (done) done(ok);
   }
   [].slice.call(document.querySelectorAll(".copy-btn")).forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -1435,16 +1446,22 @@ body { transition: background-color .3s ease, color .3s ease; }
       var text = el ? el.textContent.trim() : "";
       if (!text) return;
       var label = btn.querySelector(".copy-label");
-      function done() {
-        btn.classList.add("copied");
-        if (label) label.textContent = "Copied";
+      var status = btn.parentNode ? btn.parentNode.querySelector(".copy-status") : null;
+      // Only show success when the copy actually succeeded; announce to screen readers.
+      function done(ok) {
+        btn.classList.toggle("copied", !!ok);
+        if (label) label.textContent = ok ? "Copied" : "Copy";
+        if (status) status.textContent = ok
+          ? "Checksum copied to clipboard"
+          : "Couldn’t copy — select the text and copy it manually";
         setTimeout(function () {
           btn.classList.remove("copied");
           if (label) label.textContent = "Copy";
+          if (status) status.textContent = "";
         }, 1800);
       }
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { fallbackCopy(text, done); });
       } else {
         fallbackCopy(text, done);
       }
@@ -1470,12 +1487,13 @@ body { transition: background-color .3s ease, color .3s ease; }
   if (analyticsOn) {
     var gc = document.createElement("script");
     gc.async = true;
-    gc.src = "//gc.zgo.at/count.js";
+    gc.src = "https://gc.zgo.at/count.js";
     gc.setAttribute("data-goatcounter", GC_ENDPOINT);
     document.head.appendChild(gc);
 
     // Aggregate, no-PII events: download conversions + demo engagement.
-    [].slice.call(document.querySelectorAll('a[href*="SlidingPuzzle-Windows.zip"]'))
+    // href$= so the checksum link (.zip.sha256) is not counted as a download.
+    [].slice.call(document.querySelectorAll('a[href$="SlidingPuzzle-Windows.zip"]'))
       .forEach(function (a) {
         a.addEventListener("click", function () { countEvent("download-windows-zip", "Download click"); });
       });
