@@ -1,0 +1,83 @@
+name: Deploy landing page to GitHub Pages
+
+# Publishes the landing page on every push to main:
+#   1. Rebuilds the self-contained sliding-puzzle.html (CSS/JS/images inlined).
+#   2. Cache-busts the styles.css / script.js links with the commit SHA so a new
+#      deploy is never masked by a stale browser cache.
+#   3. Deploys the result to GitHub Pages via Actions (no commit-back loop).
+#
+# One-time setup: in repo Settings -> Pages -> "Build and deployment", set
+# Source to "GitHub Actions". (Equivalent API call:
+#   gh api -X PUT repos/michalvalco/sliding-puzzle/pages -f build_type=workflow )
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; let an in-progress run finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build standalone single-file copy
+        # Reads the clean index.html, so this must run BEFORE cache-busting.
+        run: python scripts/build_standalone.py
+
+      - name: Cache-bust CSS/JS links
+        run: |
+          v="${GITHUB_SHA::8}"
+          sed -i "s#href=\"styles.css\"#href=\"styles.css?v=${v}\"#g" index.html
+          sed -i "s#src=\"script.js\"#src=\"script.js?v=${v}\"#g" index.html
+          echo "Cache-busted assets with ?v=${v}"
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp index.html styles.css script.js sliding-puzzle.html _site/
+          cp -r media _site/
+          # Ship the checksum next to the page so it has a stable Pages URL too.
+          if [ -f SlidingPuzzle-Windows.zip.sha256 ]; then
+            cp SlidingPuzzle-Windows.zip.sha256 _site/
+          fi
+
+      - name: Configure Pages
+        # enablement attempts to switch the repo to Actions-based Pages on first
+        # run. If the repo is still on legacy "deploy from branch", do the one-time
+        # flip in Settings -> Pages -> Source = "GitHub Actions" (see header).
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
