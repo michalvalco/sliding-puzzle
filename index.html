@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A calm, beautiful sliding puzzle game where every puzzle is guaranteed solvable. Daily challenges, your own photos, three difficulties, and a relaxing soundtrack.">
+    <meta name="keywords" content="sliding puzzle, cozy game, relaxing puzzle game, daily puzzle, photo puzzle, picture puzzle">
+    <meta name="author" content="Michal Valco">
+    <meta name="theme-color" content="#a8e6da">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sliding Puzzle — beautiful puzzles, guaranteed solvable">
+    <meta property="og:description" content="A calm, cozy sliding puzzle game. Every puzzle is solvable, a fresh Daily Challenge each day, and you can play with your own photos.">
+    <meta property="og:image" content="media/welcome.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <title>Sliding Puzzle — beautiful puzzles, guaranteed solvable</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="skip-link" href="#play">Skip to the puzzle</a>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a class="nav-brand" href="#top" aria-label="Sliding Puzzle home">
+                <span class="nav-mark" aria-hidden="true"></span>
+                Sliding&nbsp;Puzzle
+            </a>
+            <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="#play">Play</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#daily">Daily</a></li>
+                <li><a href="#manual">Manual</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a class="btn btn-ghost-nav" href="#download">Download</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero" id="top">
+        <div class="container hero-grid">
+            <div class="hero-copy">
+                <p class="eyebrow">A cozy puzzle for calm minds</p>
+                <h1 class="hero-title">Beautiful puzzles,<br><span class="accent">guaranteed solvable.</span></h1>
+                <p class="hero-sub">
+                    Slide gorgeous photos back into place at your own pace. No timers shouting at you,
+                    no impossible boards — just the quiet satisfaction of things falling into order.
+                </p>
+                <ul class="trust-row" aria-label="Highlights">
+                    <li><span class="dot dot-teal"></span>100% solvable</li>
+                    <li><span class="dot dot-sky"></span>Daily Challenge</li>
+                    <li><span class="dot dot-gold"></span>Your own photos</li>
+                    <li><span class="dot dot-navy"></span>Relaxing soundtrack</li>
+                </ul>
+                <div class="hero-cta">
+                    <a class="btn btn-primary" href="#download">Download for Windows</a>
+                    <a class="btn btn-ghost" href="#manual">How to play</a>
+                </div>
+                <p class="hero-foot">Free to play · Windows (macOS &amp; Linux coming) · No account needed</p>
+            </div>
+
+            <!-- Interactive demo puzzle -->
+            <div class="hero-demo" id="play">
+                <div class="demo-card">
+                    <div class="demo-head">
+                        <span class="demo-title">Try it — slide the tiles</span>
+                        <span class="demo-moves"><span id="move-count">0</span> moves</span>
+                    </div>
+                    <div class="puzzle" id="puzzle" role="group" aria-label="Interactive 3 by 3 sliding puzzle">
+                        <!-- tiles injected by script.js -->
+                    </div>
+                    <div class="demo-controls">
+                        <button class="btn btn-soft" id="shuffle-btn" type="button">Shuffle</button>
+                        <button class="btn btn-soft" id="reset-btn" type="button">Reset</button>
+                        <span class="demo-status" id="demo-status" role="status">Move tiles into the empty space</span>
+                    </div>
+                </div>
+                <p class="demo-caption">Every shuffle is made of real moves — so this little board, like the game, is always solvable.</p>
+            </div>
+        </div>
+        <div class="hero-wash" aria-hidden="true"></div>
+    </header>
+
+    <!-- Frustration-free band -->
+    <section class="band" aria-label="Why it feels good">
+        <div class="container band-grid">
+            <div class="band-lead">
+                <h2>The puzzle that can&rsquo;t trap you</h2>
+                <p>
+                    Most sliding puzzles shuffle tiles at random — and almost half of those boards
+                    can never be solved. This one scrambles by making real moves from a finished
+                    picture, so there is <strong>always</strong> a way home. Relaxing by design.
+                </p>
+            </div>
+            <div class="stat-cards">
+                <div class="stat">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-label">solvable boards</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">3</span>
+                    <span class="stat-label">difficulties · 3×3 → 5×5</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num">∞</span>
+                    <span class="stat-label">puzzles from your photos</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <p class="eyebrow center">What&rsquo;s inside</p>
+            <h2 class="section-title">Made to be a small, daily pleasure</h2>
+
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke-linecap="round"/></svg></span>
+                    <h3>The Daily Shift</h3>
+                    <p>One puzzle a day, the same for everyone. Easy on weekdays, a tougher board at the weekend — and a streak that grows every day you return.</p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <h3>Your photos, your puzzles</h3>
+                    <p>Drop in a favourite photo and crop it right in the game. Family, pets, places you love — endless puzzles that actually mean something.</p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M8 13.5 6.5 22 12 19l5.5 3-1.5-8.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <h3>13 achievements</h3>
+                    <p>Speed, mastery, efficiency and a few secrets. Gentle goals that reward you for playing your way — never for grinding.</p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z"/></svg></span>
+                    <h3>Themes &amp; reduced motion</h3>
+                    <p>Light, dark and high-contrast themes, separate music and sound sliders, and a reduced-motion mode. Comfortable for every player and screen.</p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="13" rx="2"/><path d="M9 21h6M8 8h8M8 12h5" stroke-linecap="round"/></svg></span>
+                    <h3>Shareable victory cards</h3>
+                    <p>Finish a puzzle and the game makes a little keepsake card of your win — your time, your moves, your picture — ready to save and share.</p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="f-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 14v-4M8 17V7M12 20V4M16 17V7M20 14v-4" stroke-linecap="round"/></svg></span>
+                    <h3>Calm by default</h3>
+                    <p>A soft soundtrack and a satisfying tile sound, smooth slides with input that never feels dropped, and progress that saves itself automatically.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Daily challenge spotlight -->
+    <section class="daily" id="daily">
+        <div class="container daily-grid">
+            <figure class="daily-shot">
+                <img class="zoomable" src="media/daily_challenge.png" alt="The Daily Challenge screen showing today's weekend puzzle, difficulty, streak, and a countdown to the next one." loading="lazy" width="1280" height="720">
+            </figure>
+            <div class="daily-copy">
+                <p class="eyebrow">A reason to come back</p>
+                <h2>A fresh challenge, every single day</h2>
+                <p>
+                    Everyone gets the same puzzle each day, generated from the date so it&rsquo;s
+                    identical on every machine. Keep your streak alive, watch the countdown to the
+                    next one, and feel the week&rsquo;s rhythm — gentle Mondays, a proper Saturday test.
+                </p>
+                <ul class="check-list">
+                    <li>Same board for everyone, worldwide</li>
+                    <li>Current &amp; best streak, tracked correctly across time zones</li>
+                    <li>Difficulty that shifts with the day of the week</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Manual -->
+    <section class="manual" id="manual">
+        <div class="container">
+            <p class="eyebrow center">Everything you need to know</p>
+            <h2 class="section-title">Game manual</h2>
+            <p class="section-sub">The whole game in a minute — no reading required to start.</p>
+
+            <div class="manual-grid">
+                <div class="manual-main">
+                    <ol class="how-steps">
+                        <li>
+                            <span class="step-n">1</span>
+                            <div><h3>Pick a mode &amp; size</h3>
+                            <p>Choose a <strong>Picture</strong> puzzle (rebuild a photo) or a <strong>Number</strong> puzzle, then a grid: 3×3 to ease in, up to 5×5 for a real challenge. Harder sizes unlock as you win.</p></div>
+                        </li>
+                        <li>
+                            <span class="step-n">2</span>
+                            <div><h3>Slide the tiles</h3>
+                            <p>Click a tile next to the empty space, or use the arrow keys, to slide it in. Rebuild the picture (or put 1–N in order). The board is always solvable — you can&rsquo;t get stuck.</p></div>
+                        </li>
+                        <li>
+                            <span class="step-n">3</span>
+                            <div><h3>Win, and keep going</h3>
+                            <p>Finish to earn a victory card, unlock the next difficulty, and grow your stats. Come back for the Daily Challenge and keep your streak alive.</p></div>
+                        </li>
+                    </ol>
+
+                    <div class="tips">
+                        <h3>Handy to know</h3>
+                        <ul>
+                            <li><strong>Stuck?</strong> Picture mode has a hint that shows the finished image.</li>
+                            <li><strong>Misclick?</strong> Undo up to five moves, or reset the board.</li>
+                            <li><strong>Make it yours.</strong> Add your own photos and crop them in-game.</li>
+                            <li><strong>Comfort first.</strong> Switch theme, split music/SFX volume, or turn on reduced motion in Settings.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <aside class="controls-card" aria-label="Keyboard controls">
+                    <h3>Controls</h3>
+                    <dl class="controls-list">
+                        <div><dt><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></dt><dd>Move tiles</dd></div>
+                        <div><dt><kbd>Mouse</kbd></dt><dd>Click a tile to slide</dd></div>
+                        <div><dt><kbd>U</kbd></dt><dd>Undo (up to 5)</dd></div>
+                        <div><dt><kbd>R</kbd></dt><dd>Reset puzzle</dd></div>
+                        <div><dt><kbd>P</kbd></dt><dd>Pause</dd></div>
+                        <div><dt><kbd>M</kbd> / <kbd>N</kbd></dt><dd>Music / sound</dd></div>
+                        <div><dt><kbd>F11</kbd></dt><dd>Fullscreen</dd></div>
+                        <div><dt><kbd>?</kbd> / <kbd>F1</kbd></dt><dd>All shortcuts</dd></div>
+                        <div><dt><kbd>Esc</kbd></dt><dd>Quit (asks first)</dd></div>
+                    </dl>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery (real screenshots) -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <p class="eyebrow center">See it for real</p>
+            <h2 class="section-title">Actual screens, not mock-ups</h2>
+            <p class="section-sub">Every image below is captured straight from the game — click to enlarge.</p>
+
+            <div class="gallery-grid">
+                <figure class="shot shot-wide">
+                    <img class="zoomable" src="media/welcome.png" alt="The welcome screen with a calm teal-to-sky gradient and rounded menu buttons." loading="lazy" width="1280" height="720">
+                    <figcaption>Calm, uncluttered menus</figcaption>
+                </figure>
+                <figure class="shot">
+                    <img class="zoomable" src="media/achievements.png" alt="The achievements gallery showing unlockable badges across categories." loading="lazy" width="1280" height="720">
+                    <figcaption>13 achievements to discover</figcaption>
+                </figure>
+                <figure class="shot">
+                    <img class="zoomable" src="media/stats.png" alt="The statistics dashboard with totals, averages and personal records." loading="lazy" width="1280" height="720">
+                    <figcaption>Your stats &amp; records</figcaption>
+                </figure>
+                <figure class="shot">
+                    <img class="zoomable" src="media/settings_light.png" alt="The settings screen in the light theme with volume sliders and theme buttons." loading="lazy" width="1280" height="720">
+                    <figcaption>Light theme</figcaption>
+                </figure>
+                <figure class="shot">
+                    <img class="zoomable" src="media/settings_dark.png" alt="The same settings screen in the dark theme." loading="lazy" width="1280" height="720">
+                    <figcaption>Dark theme</figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story / photos -->
+    <section class="story">
+        <div class="container story-grid">
+            <div class="story-copy">
+                <p class="eyebrow">Family-crafted</p>
+                <h2>Puzzles with a little soul</h2>
+                <p>
+                    The puzzles you see are real photographs — quiet lakes, mountain mornings, a lone
+                    pine at golden hour. Add your own and the game becomes a gallery of your memories,
+                    one gentle slide at a time.
+                </p>
+            </div>
+            <div class="photo-strip">
+                <img class="zoomable" src="media/hero.jpg" alt="A lone pine at golden hour, one of the built-in puzzle photos." loading="lazy" width="440" height="440">
+                <img class="zoomable" src="media/puzzle-3.jpg" alt="A Norwegian lake and mountains, a built-in puzzle photo." loading="lazy" width="440" height="440">
+                <img class="zoomable" src="media/puzzle-1.jpg" alt="A calm lake with driftwood, a built-in puzzle photo." loading="lazy" width="440" height="440">
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section class="download" id="download">
+        <div class="container">
+            <p class="eyebrow center">Play in two minutes</p>
+            <h2 class="section-title">Download &amp; play</h2>
+            <p class="section-sub">Free, no account, nothing uploaded. Windows 10 / 11 (64-bit).</p>
+
+            <div class="download-card">
+                <div class="dl-main">
+                    <a class="btn btn-primary btn-lg" href="https://github.com/michalvalco/sliding-puzzle/releases/latest/download/SlidingPuzzle-Windows.zip">Download for Windows (.zip)</a>
+                    <p class="dl-note"><a href="https://github.com/michalvalco/sliding-puzzle/releases">All releases &amp; versions</a></p>
+                </div>
+                <ol class="dl-steps">
+                    <li><span class="step-n">1</span><div><h3>Download &amp; unzip</h3><p>Grab the <code>.zip</code> above and extract it anywhere.</p></div></li>
+                    <li><span class="step-n">2</span><div><h3>Run the game</h3><p>Double-click <code>SlidingPuzzle.exe</code>. First time, Windows SmartScreen may ask — choose <em>More info → Run anyway</em> (it&rsquo;s an unsigned indie build).</p></div></li>
+                    <li><span class="step-n">3</span><div><h3>Play</h3><p>That&rsquo;s it — your progress saves next to the game. No installer, no internet needed.</p></div></li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section class="roadmap">
+        <div class="container">
+            <p class="eyebrow center">Where it&rsquo;s going</p>
+            <h2 class="section-title">Roadmap</h2>
+            <ol class="timeline">
+                <li class="done"><span class="t-dot"></span><div><h3>Foundation &amp; progression</h3><p>Core gameplay, three difficulties, unlocking and saves.</p></div></li>
+                <li class="done"><span class="t-dot"></span><div><h3>Polish, audio &amp; achievements</h3><p>Music, themes, custom photos, 13 achievements, collection &amp; stats.</p></div></li>
+                <li class="done"><span class="t-dot"></span><div><h3>Live-ops &amp; player accounts</h3><p>Daily Challenge with streaks, victory cards, profiles &amp; guest mode.</p></div></li>
+                <li class="now"><span class="t-dot"></span><div><h3>Distribution <span class="pill">in progress</span></h3><p>Polished builds for Windows, macOS &amp; Linux, and a wider release.</p></div></li>
+                <li class="next"><span class="t-dot"></span><div><h3>Online &amp; social <span class="pill pill-soft">later</span></h3><p>Global leaderboards and a way to share the day&rsquo;s board with friends.</p></div></li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container cta-inner">
+            <h2>Ready for a calmer kind of puzzle?</h2>
+            <p>Slide a few tiles, breathe out, and watch the picture come together.</p>
+            <div class="cta-buttons">
+                <a class="btn btn-primary btn-lg" href="#download">Download for Windows</a>
+                <a class="btn btn-ghost btn-lg" href="#play">Play the demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <span class="nav-brand"><span class="nav-mark" aria-hidden="true"></span> Sliding Puzzle</span>
+                <p>A calm, cozy sliding puzzle game built with Python &amp; Pygame.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Play</h4>
+                <ul>
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="#manual">Game manual</a></li>
+                    <li><a href="#daily">Daily Challenge</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>More</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="https://github.com/michalvalco/sliding-puzzle/releases">Release notes</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Sliding Puzzle Game · Made with care by Michal Valco · Free to play, all rights reserved</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" hidden>
+        <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close image">&times;</button>
+        <img id="lightbox-img" alt="">
+        <p class="lightbox-cap" id="lightbox-cap"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
