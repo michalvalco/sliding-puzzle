@@ -63,6 +63,7 @@
                     <li><a href="#daily">Daily</a></li>
                     <li><a href="#manual">Manual</a></li>
                     <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#faq">Questions</a></li>
                     <li><a class="btn btn-ghost-nav" href="#download">Download</a></li>
                 </ul>
                 <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
@@ -360,6 +361,17 @@
                         <li>No account</li>
                         <li>Nothing leaves your PC</li>
                     </ul>
+                    <div class="dl-checksum">
+                        <p class="dl-checksum-head">SHA-256 · <code>SlidingPuzzle-Windows.zip</code></p>
+                        <div class="dl-checksum-row">
+                            <code id="dl-sha" class="dl-sha">93c5f18a1651e62fc44cbca2fe5cf09d1ac8020b9c818ae885cbbb6c78a2302d</code>
+                            <button class="copy-btn" id="copy-sha" type="button" data-copy-target="dl-sha" aria-label="Copy SHA-256 checksum">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke-linecap="round"/></svg>
+                                <span class="copy-label">Copy</span>
+                            </button>
+                        </div>
+                        <p class="dl-checksum-note">Optional: confirm the build is genuine. In PowerShell, run <code>Get-FileHash SlidingPuzzle-Windows.zip</code> and check the hash matches the one above. You can also download the <a href="SlidingPuzzle-Windows.zip.sha256"><code>.sha256</code> file</a>.</p>
+                    </div>
                     <details class="dl-safe">
                         <summary>Is it safe? Why does Windows warn me?</summary>
                         <p>The build isn&rsquo;t code-signed (certificates are pricey for a free indie game), so Windows SmartScreen shows a blue &ldquo;unrecognized app&rdquo; notice the first time you run it. That&rsquo;s expected — click <em>More info → Run anyway</em>. There&rsquo;s no installer and no account, and nothing is uploaded: your photos and progress stay on your computer.</p>
@@ -374,8 +386,108 @@
         </div>
     </section>
 
+    <!-- What's new -->
+    <section class="whatsnew" id="whatsnew">
+        <div class="container">
+            <p class="eyebrow center">Still being cared for</p>
+            <h2 class="section-title">What&rsquo;s new</h2>
+            <p class="section-sub">A few of the most recent updates. <a href="https://github.com/michalvalco/sliding-puzzle/releases">See all releases &amp; notes&nbsp;&rarr;</a></p>
+
+            <ol class="changelog">
+                <li class="release">
+                    <div class="rel-head">
+                        <a class="rel-ver" href="https://github.com/michalvalco/sliding-puzzle/releases/tag/v0.7.0">v0.7.0</a>
+                        <span class="rel-date">Nov 2025</span>
+                        <span class="pill">current</span>
+                    </div>
+                    <ul class="rel-notes">
+                        <li>New <strong>Daily Challenge</strong>: the same date-seeded puzzle for everyone, with streaks and a countdown to the next one.</li>
+                        <li>The <strong>&ldquo;Daily Shift&rdquo;</strong> keeps weekday puzzles gentle and weekends tougher.</li>
+                        <li>Added a <strong>reduced-motion</strong> mode and made every setting (volume, theme, fullscreen) stick across restarts.</li>
+                        <li>Safer <strong>auto-saves</strong> that can recover a corrupted progress file.</li>
+                    </ul>
+                </li>
+                <li class="release">
+                    <div class="rel-head">
+                        <a class="rel-ver" href="https://github.com/michalvalco/sliding-puzzle/releases">v0.6.0</a>
+                        <span class="rel-date">Nov 2025</span>
+                    </div>
+                    <ul class="rel-notes">
+                        <li><strong>Undo</strong> up to five moves and a confirm-to-<strong>reset</strong> button.</li>
+                        <li>A <kbd>?</kbd> / <kbd>F1</kbd> overlay listing every keyboard shortcut.</li>
+                        <li>Built-in screenshots and an FPS counter for the curious.</li>
+                    </ul>
+                </li>
+                <li class="release">
+                    <div class="rel-head">
+                        <a class="rel-ver" href="https://github.com/michalvalco/sliding-puzzle/releases">v0.5.0</a>
+                        <span class="rel-date">Nov 2025</span>
+                    </div>
+                    <ul class="rel-notes">
+                        <li>A <strong>collection</strong> gallery that tracks every puzzle you finish.</li>
+                        <li>A <strong>statistics</strong> dashboard with your records, averages and favourites.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <p class="eyebrow center">Before you download</p>
+            <h2 class="section-title">Questions &amp; answers</h2>
+            <p class="section-sub">The things people ask most. Short version: it&rsquo;s free, it&rsquo;s private, and it stays on your PC.</p>
+
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary>Is it safe to download? Why does Windows warn me?</summary>
+                    <div class="faq-body">
+                        <p>Yes. The build just isn&rsquo;t code-signed &mdash; signing certificates are expensive for a free indie game &mdash; so the first time you run it Windows SmartScreen shows a blue &ldquo;Windows protected your PC&rdquo; notice for an unrecognized app. That&rsquo;s expected: click <em>More info&nbsp;&rarr;&nbsp;Run anyway</em>. There&rsquo;s no installer and nothing is uploaded. If you&rsquo;d like extra reassurance, the <a href="#download">download card</a> shows the file&rsquo;s SHA-256 so you can verify it&rsquo;s the genuine build.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>Is it really free?</summary>
+                    <div class="faq-body">
+                        <p>Yes &mdash; free to download and free to play, with no ads, no in-app purchases and no account. The game is proprietary (all rights reserved), but it costs you nothing to enjoy it.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>Do you collect my data or upload my photos?</summary>
+                    <div class="faq-body">
+                        <p>No. The game runs entirely on your computer. Your progress, settings, any photos you add and your stats are saved in files next to the game &mdash; nothing is sent anywhere and there&rsquo;s no sign-in. This website uses a privacy-friendly, cookieless analytics counter &mdash; it records anonymous page views plus a few aggregate clicks (like the download button), honours Do&nbsp;Not&nbsp;Track and never identifies you. The game itself collects nothing.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>Does it work offline?</summary>
+                    <div class="faq-body">
+                        <p>Completely. Once you&rsquo;ve unzipped it, no internet is needed &mdash; play on a plane, a train or a cabin in the woods. The only thing that needs a connection is checking back here for a new version.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>Will there be a Mac or Linux version?</summary>
+                    <div class="faq-body">
+                        <p>That&rsquo;s the plan &mdash; macOS and Linux builds are on the <a href="#roadmap">roadmap</a> for the current Distribution phase. To hear about them first, <a href="https://github.com/michalvalco/sliding-puzzle">watch the public repository</a> on GitHub and you&rsquo;ll see new releases as they land.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>How do I add my own photos?</summary>
+                    <div class="faq-body">
+                        <p>In the game, choose a Picture puzzle and pick <em>Add your own photo</em>. You can crop it right there so it fits the board, then play it at any difficulty. Family, pets, a favourite view &mdash; they all become puzzles, and they never leave your computer.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>Where does my progress save?</summary>
+                    <div class="faq-body">
+                        <p>Automatically, in a <code>data</code> folder beside the game &mdash; your unlocked levels, best times, achievements, streaks and settings. Writes are atomic and back themselves up, so a crash mid-save won&rsquo;t lose your progress. Keep that folder if you move the game to a new PC.</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
     <!-- Roadmap -->
-    <section class="roadmap">
+    <section class="roadmap" id="roadmap">
         <div class="container">
             <p class="eyebrow center">Where it&rsquo;s going</p>
             <h2 class="section-title">Roadmap</h2>
@@ -421,6 +533,7 @@
                 <ul>
                     <li><a href="#features">Features</a></li>
                     <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#faq">Questions</a></li>
                     <li><a href="https://github.com/michalvalco/sliding-puzzle/releases">Release notes</a></li>
                 </ul>
             </div>

@@ -366,7 +366,7 @@
 
   /* ---------- Scroll reveal ---------- */
   var revealTargets = document.querySelectorAll(
-    ".feature-card, .shot, .stat, .how-steps li, .dl-steps li, .timeline li, .band-lead, .daily-copy, .story-copy, .daily-shot"
+    ".feature-card, .shot, .stat, .how-steps li, .dl-steps li, .timeline li, .band-lead, .daily-copy, .story-copy, .daily-shot, .release"
   );
   if (!reduceMotion && "IntersectionObserver" in window) {
     revealTargets.forEach(function (el) { el.classList.add("reveal"); });
@@ -376,5 +376,76 @@
       });
     }, { threshold: 0.12 });
     revealTargets.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Copy-to-clipboard (SHA-256 checksum) ---------- */
+  function fallbackCopy(text, done) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "absolute";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      if (done) done();
+    } catch (e) {}
+  }
+  [].slice.call(document.querySelectorAll(".copy-btn")).forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var el = document.getElementById(btn.getAttribute("data-copy-target"));
+      var text = el ? el.textContent.trim() : "";
+      if (!text) return;
+      var label = btn.querySelector(".copy-label");
+      function done() {
+        btn.classList.add("copied");
+        if (label) label.textContent = "Copied";
+        setTimeout(function () {
+          btn.classList.remove("copied");
+          if (label) label.textContent = "Copy";
+        }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+      } else {
+        fallbackCopy(text, done);
+      }
+    });
+  });
+
+  /* ---------- Privacy-friendly analytics (GoatCounter) ----------
+     Cookieless, no PII, aggregate counts only. Honors Do-Not-Track /
+     Global Privacy Control and never runs from the offline standalone
+     file (file:). Register the site code at goatcounter.com and update
+     GC_ENDPOINT below if your code differs from "slidingpuzzle". */
+  var GC_ENDPOINT = "https://slidingpuzzle.goatcounter.com/count";
+  function dntEnabled() {
+    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+    return dnt === "1" || dnt === "yes" || navigator.globalPrivacyControl === true;
+  }
+  var analyticsOn = location.protocol !== "file:" && !dntEnabled();
+  function countEvent(path, title) {
+    if (analyticsOn && window.goatcounter && typeof window.goatcounter.count === "function") {
+      window.goatcounter.count({ path: path, title: title, event: true });
+    }
+  }
+  if (analyticsOn) {
+    var gc = document.createElement("script");
+    gc.async = true;
+    gc.src = "//gc.zgo.at/count.js";
+    gc.setAttribute("data-goatcounter", GC_ENDPOINT);
+    document.head.appendChild(gc);
+
+    // Aggregate, no-PII events: download conversions + demo engagement.
+    [].slice.call(document.querySelectorAll('a[href*="SlidingPuzzle-Windows.zip"]'))
+      .forEach(function (a) {
+        a.addEventListener("click", function () { countEvent("download-windows-zip", "Download click"); });
+      });
+    var sBtnA = document.getElementById("shuffle-btn");
+    if (sBtnA) sBtnA.addEventListener("click", function () { countEvent("demo-shuffle", "Demo: Shuffle"); });
+    var dBtnA = document.getElementById("daily-toggle");
+    if (dBtnA) dBtnA.addEventListener("click", function () { countEvent("demo-daily", "Demo: Daily"); });
   }
 })();
