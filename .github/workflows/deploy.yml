@@ -46,6 +46,9 @@ jobs:
           v="${GITHUB_SHA::8}"
           sed -i "s#href=\"styles.css\"#href=\"styles.css?v=${v}\"#g" index.html
           sed -i "s#src=\"script.js\"#src=\"script.js?v=${v}\"#g" index.html
+          # Fail fast if either substitution silently stopped matching (tags changed).
+          grep -q "styles.css?v=${v}" index.html || { echo "::error::styles.css cache-bust did not apply"; exit 1; }
+          grep -q "script.js?v=${v}" index.html || { echo "::error::script.js cache-bust did not apply"; exit 1; }
           echo "Cache-busted assets with ?v=${v}"
 
       - name: Assemble site
