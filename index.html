@@ -56,17 +56,23 @@
                 <span class="nav-mark" aria-hidden="true"></span>
                 Sliding&nbsp;Puzzle
             </a>
-            <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
-                <span></span><span></span><span></span>
-            </button>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="#play">Play</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#daily">Daily</a></li>
-                <li><a href="#manual">Manual</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a class="btn btn-ghost-nav" href="#download">Download</a></li>
-            </ul>
+            <div class="nav-right">
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#play">Play</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#daily">Daily</a></li>
+                    <li><a href="#manual">Manual</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a class="btn btn-ghost-nav" href="#download">Download</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+                    <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19" stroke-linecap="round"/></svg>
+                    <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+                </button>
+                <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -98,14 +104,32 @@
                 <div class="demo-card">
                     <div class="demo-head">
                         <span class="demo-title">Try it — slide the tiles</span>
-                        <span class="demo-moves"><span id="move-count">0</span> moves</span>
+                        <span class="demo-meta"><span id="move-count">0</span> moves · <span id="demo-time">0:00</span></span>
                     </div>
-                    <div class="puzzle" id="puzzle" role="group" aria-label="Interactive 3 by 3 sliding puzzle">
-                        <!-- tiles injected by script.js -->
+                    <div class="puzzle-wrap">
+                        <div class="puzzle" id="puzzle" role="group" aria-label="Interactive 3 by 3 sliding puzzle. Click a tile or use the arrow keys to slide.">
+                            <!-- tiles injected by script.js -->
+                        </div>
+                        <div class="win-card" id="win-card" role="status" hidden>
+                            <p class="win-title">Solved!</p>
+                            <p class="win-stats" id="win-stats"></p>
+                            <div class="win-actions">
+                                <button class="btn btn-soft" id="win-again" type="button">Play again</button>
+                                <a class="btn btn-primary" href="#download">Get the full game</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="demo-swatches" id="demo-swatches" role="group" aria-label="Choose a picture or numbers">
+                        <button class="swatch is-active" type="button" data-img="media/hero.jpg" aria-pressed="true" aria-label="Lone pine photo" style="background-image:url('media/hero.jpg')"></button>
+                        <button class="swatch" type="button" data-img="media/puzzle-3.jpg" aria-pressed="false" aria-label="Lake and mountains photo" style="background-image:url('media/puzzle-3.jpg')"></button>
+                        <button class="swatch" type="button" data-img="media/puzzle-1.jpg" aria-pressed="false" aria-label="Lake photo" style="background-image:url('media/puzzle-1.jpg')"></button>
+                        <button class="swatch" type="button" data-img="media/puzzle-2.jpg" aria-pressed="false" aria-label="Forest photo" style="background-image:url('media/puzzle-2.jpg')"></button>
+                        <button class="swatch swatch-num" type="button" data-mode="number" aria-pressed="false" aria-label="Numbers mode">123</button>
                     </div>
                     <div class="demo-controls">
                         <button class="btn btn-soft" id="shuffle-btn" type="button">Shuffle</button>
-                        <button class="btn btn-soft" id="reset-btn" type="button">Reset</button>
+                        <button class="btn btn-soft" id="reset-btn" type="button">Easy</button>
+                        <button class="btn btn-soft" id="daily-toggle" type="button" aria-pressed="false">Daily</button>
                         <span class="demo-status" id="demo-status" role="status">Move tiles into the empty space</span>
                     </div>
                 </div>
@@ -331,6 +355,15 @@
                 <div class="dl-main">
                     <a class="btn btn-primary btn-lg" href="https://github.com/michalvalco/sliding-puzzle/releases/latest/download/SlidingPuzzle-Windows.zip">Download for Windows (.zip)</a>
                     <p class="dl-note"><a href="https://github.com/michalvalco/sliding-puzzle/releases">All releases &amp; versions</a></p>
+                    <ul class="dl-trust" aria-label="What you get">
+                        <li>v0.7.0</li>
+                        <li>No account</li>
+                        <li>Nothing leaves your PC</li>
+                    </ul>
+                    <details class="dl-safe">
+                        <summary>Is it safe? Why does Windows warn me?</summary>
+                        <p>The build isn&rsquo;t code-signed (certificates are pricey for a free indie game), so Windows SmartScreen shows a blue &ldquo;unrecognized app&rdquo; notice the first time you run it. That&rsquo;s expected — click <em>More info → Run anyway</em>. There&rsquo;s no installer and no account, and nothing is uploaded: your photos and progress stay on your computer.</p>
+                    </details>
                 </div>
                 <ol class="dl-steps">
                     <li><span class="step-n">1</span><div><h3>Download &amp; unzip</h3><p>Grab the <code>.zip</code> above and extract it anywhere.</p></div></li>

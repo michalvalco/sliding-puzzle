@@ -320,6 +320,84 @@ kbd { font-family: var(--font-body); font-size: .8rem; font-weight: 600; color: 
 .lightbox-close { position: absolute; top: 3vmin; right: 4vmin; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.12); color: #fff; font-size: 1.7rem; line-height: 1; cursor: pointer; transition: background .15s; }
 .lightbox-close:hover { background: rgba(255,255,255,.25); }
 
+/* ---------- Nav theme toggle ---------- */
+.nav-right { display: flex; align-items: center; gap: .75rem; }
+.theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; flex: none; transition: background .15s, border-color .15s; }
+.theme-toggle:hover { border-color: var(--teal); background: var(--brand-tint); }
+.theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.theme-toggle .ic-sun { display: none; }
+[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
+[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
+
+/* ---------- Demo extras (timer, swatches, win card, nudge, numbers) ---------- */
+.demo-meta { font-family: var(--font-head); font-weight: 600; color: var(--brand); font-size: .9rem; }
+.puzzle-wrap { position: relative; }
+.num-tile { background-image: none !important; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-weight: 600; font-size: 1.7rem; }
+.tile.nudge { animation: nudge 1.5s ease-in-out infinite; }
+@keyframes nudge { 0%, 100% { transform: scale(1); } 50% { transform: scale(.93); } }
+
+.demo-swatches { display: flex; gap: .4rem; margin: .85rem 0 .1rem; flex-wrap: wrap; }
+.swatch { width: 34px; height: 34px; border-radius: 8px; border: 2px solid var(--line); background-size: cover; background-position: center; cursor: pointer; padding: 0; transition: border-color .15s, transform .15s; }
+.swatch:hover { transform: translateY(-2px); }
+.swatch.is-active { border-color: var(--brand); }
+.swatch-num { background: var(--surface-2); color: var(--brand-strong); font-family: var(--font-head); font-weight: 600; font-size: .78rem; }
+#daily-toggle.is-active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+.win-card { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; text-align: center; padding: 1rem; border-radius: var(--radius); background: rgba(255,255,255,.93); }
+.win-card[hidden] { display: none; }
+[data-theme="dark"] .win-card { background: rgba(22,38,59,.94); }
+.win-title { font-family: var(--font-head); font-weight: 700; font-size: 1.5rem; color: var(--brand-strong); }
+.win-stats { font-size: .88rem; color: var(--ink-soft); }
+.win-actions { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; margin-top: .4rem; }
+.win-actions .btn { padding: .5rem 1rem; font-size: .9rem; }
+
+.confetti-bit { position: absolute; top: -10px; width: 8px; height: 13px; border-radius: 2px; pointer-events: none; z-index: 3; animation: confetti-fall 1.6s ease-in forwards; }
+@keyframes confetti-fall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(380px) rotate(560deg); opacity: 0; } }
+
+/* ---------- Download trust strip + safety note ---------- */
+.dl-trust { list-style: none; display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; padding: 0; }
+.dl-trust li { font-size: .8rem; font-weight: 500; color: var(--ink-soft); background: var(--surface-2); border-radius: 999px; padding: .25rem .75rem; }
+.dl-safe { margin: 1rem auto 0; text-align: left; max-width: 48ch; }
+.dl-safe summary { cursor: pointer; font-family: var(--font-head); font-weight: 500; color: var(--brand-strong); font-size: .92rem; }
+.dl-safe p { font-size: .9rem; margin-top: .5rem; color: var(--ink-soft); }
+
+/* ---------- Focus visibility (new interactive bits) ---------- */
+.zoomable:focus-visible { outline: 3px solid var(--brand-strong); outline-offset: 3px; }
+.swatch:focus-visible, .theme-toggle:focus-visible { outline: 3px solid var(--brand-strong); outline-offset: 2px; }
+.lightbox-close:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* ---------- Dark theme (page-level, mirrors the in-game themes) ---------- */
+body { transition: background-color .3s ease, color .3s ease; }
+[data-theme="dark"] {
+    --bg:          #0f1b2a;
+    --surface:     #17273b;
+    --surface-2:   #1f3349;
+    --ink:         #e9eef7;
+    --ink-soft:    #b3c1d4;
+    --ink-faint:   #93a4ba;
+    --brand:       #4f97c8;
+    --brand-strong:#a9d3ee;
+    --brand-tint:  #1d3148;
+    --teal:        #5bbfae;
+    --teal-soft:   #2b4f5b;
+    --sky:         #7fb8dd;
+    --gold:        #e6b65a;
+    --gold-soft:   #3a3320;
+    --line:        #2b4059;
+    --shadow-sm:   0 2px 10px rgba(0, 0, 0, .35);
+    --shadow-md:   0 16px 44px rgba(0, 0, 0, .5);
+}
+[data-theme="dark"] body { color: var(--ink-soft); }
+[data-theme="dark"] .navbar { background: rgba(15, 27, 42, .85); }
+[data-theme="dark"] .hero-wash {
+    background:
+        radial-gradient(60% 70% at 85% 0%, rgba(47, 111, 159, .35), transparent 60%),
+        radial-gradient(50% 60% at 0% 100%, rgba(91, 191, 174, .18), transparent 60%),
+        linear-gradient(180deg, #122236 0%, var(--bg) 60%);
+}
+[data-theme="dark"] .btn-primary, [data-theme="dark"] .btn-primary:hover { color: #0a1422; }
+[data-theme="dark"] .cta .btn-primary { background: #fff; color: #16507f; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 880px) {
     .manual-grid, .download-card { grid-template-columns: 1fr; }
